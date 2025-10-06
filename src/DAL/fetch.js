@@ -1,0 +1,68 @@
+import { invokeApi } from "../Utils/InvokeApi";
+
+
+export const searchProducts= async (title) => {
+  const reqObj = {
+    path: `/products/search?title=${title}`,
+    method: "GET",
+    headers: {
+    },
+
+    body: {},
+  };
+  return invokeApi(reqObj);
+};
+
+export const fetchallProductslist = async (page, rowsPerPages,title) => {
+  const reqObj = {
+    path: `/api/products?title=${title}&limit=${rowsPerPages}&page=${page}`,
+    method: "GET",
+    headers: {
+      Authorization: `Bearer ${localStorage.getItem("Token")}`,
+    },
+
+    body: {},
+  };
+  return invokeApi(reqObj);
+};
+
+export const fetchProductsbyid = async (id) => {
+  const reqObj = {
+    path: `/api/products/${id}`,
+    method: "GET",
+    headers: {
+      Authorization: `Bearer ${localStorage.getItem("Token")}`,
+    },
+
+    body: {},
+  };
+  return invokeApi(reqObj);
+};
+//////////////////////////////////////////////
+
+export const fetchallUserlist = async (page, rowsPerPages) => {
+  const reqObj = {
+    path: `/api/bids/listbidders?limit=${rowsPerPages}&page=${page}`,
+    method: "GET",
+    headers: {
+      Authorization: `Bearer ${localStorage.getItem("Token")}`,
+    },
+
+    body: {},
+  };
+  return invokeApi(reqObj);
+};
+export const fetchallUserbyid = async (id) => {
+  const reqObj = {
+    path: `/admin/users/${id}`,
+    method: "GET",
+    headers: {
+      Authorization: `Bearer ${localStorage.getItem("Token")}`,
+    },
+
+    body: {},
+  };
+  return invokeApi(reqObj);
+};
+
+
