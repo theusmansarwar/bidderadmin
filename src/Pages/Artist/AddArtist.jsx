@@ -17,6 +17,8 @@ const AddArtist = () => {
   const navigate = useNavigate();
   const { showAlert } = useAlert();
   const { id } = useParams();
+  
+    const [errors, setErrors] = useState({});
   const [artistName, setArtistName] = useState("");
   const [artistBio, setArtistBio] = useState("");
   const [artistCountry, setArtistCountry] = useState("");
@@ -66,7 +68,13 @@ const AddArtist = () => {
       if (response.status === 200 || response.status === 201) {
         showAlert("success", "Artist Added successfully!");
         navigate("/artists");
-      } else {
+      }  else if (response.missingFields) {
+        const newErrors = {};
+        response.missingFields.forEach((field) => {
+          newErrors[field.name] = field.message;
+        });
+        setErrors(newErrors);
+      }else {
         showAlert("error", response.message || "Something went wrong!");
       }
     } catch (err) {
@@ -93,6 +101,8 @@ const AddArtist = () => {
           fullWidth
           value={artistName}
           onChange={(e) => setArtistName(e.target.value)}
+             error={!!errors.artistName}
+          helperText={errors.artistName}
         />
 
         <TextField
@@ -102,6 +112,8 @@ const AddArtist = () => {
           fullWidth
           value={artistBio}
           onChange={(e) => setArtistBio(e.target.value)}
+             error={!!errors.artistBio}
+          helperText={errors.artistBio}
         />
 
         <TextField
@@ -109,6 +121,8 @@ const AddArtist = () => {
           fullWidth
           value={artistCountry}
           onChange={(e) => setArtistCountry(e.target.value)}
+             error={!!errors.artistCountry}
+          helperText={errors.artistCountry}
         />
         <FormControlLabel
           control={
@@ -133,10 +147,10 @@ const AddArtist = () => {
         />
 
         <Box sx={{ display: "flex", justifyContent: "flex-end", gap: 2 }}>
-          <Button variant="outlined" onClick={() => navigate("/artists")}>
+          <Button variant="outlined" onClick={() => navigate("/artists")} sx={{color:"var(--background-color)", borderColor:"var(--background-color)"}}>
             Cancel
           </Button>
-          <Button type="submit" variant="contained" disabled={loading}>
+          <Button type="submit" variant="contained" disabled={loading} sx={{backgroundColor:"var(--background-color)"}}>
             {loading ? "Saving..." : "Save"}
           </Button>
         </Box>
