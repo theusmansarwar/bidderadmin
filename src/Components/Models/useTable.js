@@ -30,7 +30,7 @@ import {
 import { formatDate } from "../../Utils/Formatedate";
 import truncateText from "../../truncateText";
 import { useNavigate } from "react-router-dom";
-import { deleteAllProducts, deleteAllUsers } from "../../DAL/delete";
+import { deleteAllArtist, deleteAllProducts, deleteAllUsers } from "../../DAL/delete";
 import { useAlert } from "../Alert/AlertContext";
 import DeleteModal from "./confirmDeleteModel";
 import RoleModel from "./RoleModel";
@@ -144,6 +144,9 @@ export function useTable({ attributes, tableType, limitPerPage = 25 }) {
         response = await deleteAllProducts({ ids: selected });
       } else if (tableType === "Users") {
         response = await deleteAllUsers({ ids: selected });
+      }
+       else if (tableType === "Artists") {
+        response = await deleteAllArtist({ ids: selected });
       } else {
         showAlert("error", response.message || "Failed to delete items");
       }
