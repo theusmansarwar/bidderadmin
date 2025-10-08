@@ -12,7 +12,9 @@ import { useAlert } from "../../Components/Alert/AlertContext";
 import { addArtist } from "../../DAL/create";
 import { updateArtist } from "../../DAL/edit";
 import { fetchArtists, fetchArtistsbyid } from "../../DAL/fetch";
+import { FaCircleInfo } from "react-icons/fa6";
 
+import InfoModal from "../../Components/Models/InfoModal";
 const AddArtist = () => {
   const navigate = useNavigate();
   const { showAlert } = useAlert();
@@ -25,7 +27,7 @@ const AddArtist = () => {
   const [loading, setLoading] = useState(false);
   const [isActive, setIsActive] = useState(true); // ✅ Published switch
   const [isFeatured, setIsFeatured] = useState(false);
-
+  const [open, setOpen] = useState(false);
   // ✅ Fetch Artist by ID (Edit mode)
   useEffect(() => {
     if (!id) return;
@@ -87,6 +89,25 @@ const AddArtist = () => {
 
   return (
     <Box sx={{ p: 3 }}>
+
+       <Button
+              variant="filled"
+              onClick={() => setOpen(true)}
+              sx={{
+                position: "fixed",
+                display: "flex",
+                justifySelf: "flex-end",
+                backgroundColor: "var(--background-color)",
+                color: "var(--text-color)",
+                top: "20px",
+                right: "20px",
+                gap: "5px",
+                zIndex: 10,
+              }}
+            >
+              Guide <FaCircleInfo />
+            </Button>
+            <InfoModal open={open} onClose={() => setOpen(false)} />
       <Typography variant="h4" sx={{ mb: 2 }}>
         {id ? "Edit Artist Data" : "Add Artist Data"}
       </Typography>

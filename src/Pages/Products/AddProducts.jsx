@@ -13,6 +13,10 @@ import {
   Select,
   FormControl,
 } from "@mui/material";
+
+import { FaCircleInfo } from "react-icons/fa6";
+
+import InfoModal from "../../Components/Models/InfoModal";
 import UploadFile from "../../Components/Models/UploadFile";
 import { useAlert } from "../../Components/Alert/AlertContext";
 import { createNewProducts } from "../../DAL/create";
@@ -38,6 +42,7 @@ const AddProduct = () => {
   const [isActive, setIsActive] = useState(true);
   const [soldOut, setSoldOut] = useState(false);
 
+  const [open, setOpen] = useState(false);
   // ✅ Fetch active artists for dropdown
   useEffect(() => {
     const loadArtists = async () => {
@@ -124,6 +129,24 @@ const AddProduct = () => {
 
   return (
     <Box sx={{ p: 3 }}>
+      <Button
+        variant="filled"
+        onClick={() => setOpen(true)}
+        sx={{
+          position: "fixed",
+          display: "flex",
+          justifySelf: "flex-end",
+          backgroundColor: "var(--background-color)",
+          color: "var(--text-color)",
+          top: "20px",
+          right: "20px",
+          gap: "5px",
+          zIndex: 10,
+        }}
+      >
+        Guide <FaCircleInfo />
+      </Button>
+      <InfoModal open={open} onClose={() => setOpen(false)} />
       <Typography variant="h4" sx={{ mb: 2 }}>
         {id ? "Edit Auction Product" : "Add Auction Product"}
       </Typography>
