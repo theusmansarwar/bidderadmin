@@ -7,7 +7,6 @@ import {
   Navigate,
 } from "react-router-dom";
 import "./App.css";
-import logo from "./Assets/CarterOilLogo.svg";
 import AddProducts from "./Pages/Products/AddProducts";
 import Products from "./Pages/Products/Products";
 import { AiFillProduct } from "react-icons/ai";
@@ -54,9 +53,9 @@ const App = ({ onLogout }) => {
 </div>
 
         <img
-          src={logo}
+          src="/moawin-logo.png"
           className="logo"
-          alt="digitalaura Logo"
+          alt="Moawin Logo"
         />
 
        

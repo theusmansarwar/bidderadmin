@@ -97,9 +97,9 @@ const AddProduct = () => {
       </Typography>
 
       <Box component="form" onSubmit={handleSubmit} sx={{ display: "grid", gap: 2 }}>
-        <TextField label="Title" fullWidth value={title} onChange={(e) => setTitle(e.target.value)} />
+        <TextField label="Art Title" fullWidth value={title} onChange={(e) => setTitle(e.target.value)} />
         <TextField
-          label="Description"
+          label="Art Description"
           multiline
           rows={3}
           fullWidth

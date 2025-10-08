@@ -1,13 +1,18 @@
 import React, { useState, useEffect } from "react";
-import { Box, Button, TextField, Typography, Paper, CircularProgress } from "@mui/material";
+import {
+  Box,
+  Button,
+  TextField,
+  Typography,
+  Paper,
+  CircularProgress,
+} from "@mui/material";
 import { login } from "../DAL/auth";
-import logo from "../Assets/CarterOilLogo.svg";
-import './login.css'
+import "./login.css";
 import { useAlert } from "../Components/Alert/AlertContext";
 
-
 const Login = ({ onLoginSuccess }) => {
-   const { showAlert } = useAlert(); 
+  const { showAlert } = useAlert();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [loading, setLoading] = useState(false);
@@ -21,44 +26,40 @@ const Login = ({ onLoginSuccess }) => {
     }
   }, []);
 
-const handleLogin = async (e) => {
-  e.preventDefault();
-  setLoading(true);
+  const handleLogin = async (e) => {
+    e.preventDefault();
+    setLoading(true);
 
-  const formData = new FormData();
-  formData.append("email", email);
-  formData.append("password", password);
+    const formData = new FormData();
+    formData.append("email", email);
+    formData.append("password", password);
 
-  try {
-    const result = await login(formData);
+    try {
+      const result = await login(formData);
 
-    if (result.status == 200) {
-      showAlert("success", result?.message || "Login successful!");
-      localStorage.setItem("Token", result?.token);
-      localStorage.setItem("user", JSON.stringify(result?.user));
-      onLoginSuccess();
-    } else {
-      showAlert("error", result?.message || "Login failed.");
+      if (result.status == 200) {
+        showAlert("success", result?.message || "Login successful!");
+        localStorage.setItem("Token", result?.token);
+        localStorage.setItem("user", JSON.stringify(result?.user));
+        onLoginSuccess();
+      } else {
+        showAlert("error", result?.message || "Login failed.");
+      }
+    } catch (error) {
+      if (error.response) {
+        showAlert("error", error.response.data.message || "An error occurred.");
+      } else if (error.request) {
+        showAlert("error", "No response from the server.");
+      } else {
+        showAlert("error", error?.message || "Unexpected error occurred.");
+      }
+    } finally {
+      setLoading(false);
     }
-  } catch (error) {
-    if (error.response) {
-      showAlert("error", error.response.data.message || "An error occurred.");
-    } else if (error.request) {
-      showAlert("error", "No response from the server.");
-    } else {
-      showAlert("error", error?.message || "Unexpected error occurred.");
-    }
-  } finally {
-    setLoading(false);
-  }
-};
-
+  };
 
   return (
-    <Box
-    className="login"
-   
-    >
+    <Box className="login">
       {loading && (
         <CircularProgress
           size={60}
@@ -83,7 +84,7 @@ const handleLogin = async (e) => {
         <Box component="form" onSubmit={handleLogin}>
           <Box
             component="img"
-            src={logo}
+            src="/moawin-logo.png"
             alt="digitalaura"
             sx={{
               width: "30%",

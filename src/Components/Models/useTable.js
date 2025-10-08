@@ -21,20 +21,13 @@ import {
 import { baseUrl } from "../../Config/Config";
 import DeleteIcon from "@mui/icons-material/Delete";
 import SearchIcon from "@mui/icons-material/Search";
-import {
-  fetchallProductslist,
-  fetchallUserlist,
-} from "../../DAL/fetch";
+import { fetchallProductslist, fetchallUserlist } from "../../DAL/fetch";
 import { formatDate } from "../../Utils/Formatedate";
 import truncateText from "../../truncateText";
 import { useNavigate } from "react-router-dom";
-import {
-  deleteAllProducts,
-  deleteAllUsers,
-} from "../../DAL/delete";
+import { deleteAllProducts, deleteAllUsers } from "../../DAL/delete";
 import { useAlert } from "../Alert/AlertContext";
-import DeleteModal from "./confirmDeleteModel";;
-
+import DeleteModal from "./confirmDeleteModel";
 
 export function useTable({ attributes, tableType, limitPerPage = 25 }) {
   const { showAlert } = useAlert(); // Since you created a custom hook
@@ -74,12 +67,11 @@ export function useTable({ attributes, tableType, limitPerPage = 25 }) {
   };
 
   const fetchData = async () => {
- 
     let response;
-  if (tableType === "Products") {
+    if (tableType === "Products") {
       response = await fetchallProductslist(page, rowsPerPage, searchQuery);
-      setData(response.products);
-      setTotalRecords(response.total);
+      setData(response?.products);
+      setTotalRecords(response?.total);
     } else if (tableType === "Bidders") {
       response = await fetchallUserlist(page, rowsPerPage);
       console.log("Response:", response);
@@ -87,8 +79,7 @@ export function useTable({ attributes, tableType, limitPerPage = 25 }) {
       setData(response.bids);
       setPage(response.page);
       setTotalRecords(response.totalBids);
-    } 
-    
+    }
   };
 
   const handleSelectAllClick = (event) => {
@@ -107,14 +98,14 @@ export function useTable({ attributes, tableType, limitPerPage = 25 }) {
   };
 
   const handleViewClick = (category) => {
- if (tableType === "Products") {
+    if (tableType === "Products") {
       ///////////////////////////
       navigate(`/edit-Products/${category._id}`);
     } else if (tableType === "Users") {
       setModelData(category);
       setModeltype("Update");
       setOpenUserModal(true);
-    }  
+    }
   };
 
   const handleDelete = async () => {
@@ -129,12 +120,12 @@ export function useTable({ attributes, tableType, limitPerPage = 25 }) {
       let response;
       if (tableType === "Products") {
         response = await deleteAllProducts({ ids: selected });
-      }   else if (tableType === "Users") {
+      } else if (tableType === "Users") {
         response = await deleteAllUsers({ ids: selected });
-      }else {
+      } else {
         showAlert("error", response.message || "Failed to delete items");
       }
-      if(response.status==200){
+      if (response.status == 200) {
         showAlert("success", response.message);
         fetchData();
         setSelected([]);
@@ -146,13 +137,13 @@ export function useTable({ attributes, tableType, limitPerPage = 25 }) {
   };
 
   const handleAddButton = () => {
-     if (tableType === "Products") {
+    if (tableType === "Products") {
       navigate("/add-Products");
-    }  else if (tableType === "Users") {
+    } else if (tableType === "Users") {
       setOpenUserModal(true);
       setModeltype("Add");
       setModelData();
-    } 
+    }
   };
 
   const getNestedValue = (obj, path) => {
@@ -175,10 +166,6 @@ export function useTable({ attributes, tableType, limitPerPage = 25 }) {
   return {
     tableUI: (
       <>
-       
-
-       
-
         <DeleteModal
           open={openDeleteModal}
           setOpen={setOpenDeleteModal}
@@ -195,12 +182,7 @@ export function useTable({ attributes, tableType, limitPerPage = 25 }) {
                 gap: 2,
               }}
             >
-              <Typography
-                variant="h5"
-                
-              >
-                {tableType} List
-              </Typography>
+              <Typography variant="h5">{tableType} List</Typography>
 
               <Box sx={{ display: "flex", alignItems: "center", gap: 2 }}>
                 {(tableType === "Blogs" ||
@@ -339,9 +321,9 @@ export function useTable({ attributes, tableType, limitPerPage = 25 }) {
                             ) : attr.id === "image" ||
                               attr.id === "thumbnail" ? (
                               tableType === "Testimonial" ||
-                              tableType === "Blogs"||
-                              tableType === "Featured Blogs"||
-                              tableType === "Industries"||
+                              tableType === "Blogs" ||
+                              tableType === "Featured Blogs" ||
+                              tableType === "Industries" ||
                               tableType === "CaseStudies" ? (
                                 row[attr.id] ? (
                                   <img
@@ -351,7 +333,7 @@ export function useTable({ attributes, tableType, limitPerPage = 25 }) {
                                       height: "50px",
                                       maxWidth: "200px",
                                       objectFit: "contain",
-                                      margin:"auto"
+                                      margin: "auto",
                                     }}
                                   />
                                 ) : (
@@ -384,15 +366,15 @@ export function useTable({ attributes, tableType, limitPerPage = 25 }) {
                               >
                                 {row[attr.id] ? "Public" : "Private"}
                               </span>
-                            ) : attr.id === "soldOut"? (
+                            ) : attr.id === "soldOut" ? (
                               <span
                                 style={{
                                   color: row[attr.id]
-                                    ?  "var(--warning-color)"
+                                    ? "var(--warning-color)"
                                     : "var(--success-color)",
                                   background: row[attr.id]
                                     ? "var(--warning-bgcolor)"
-                                    : "var(--success-bgcolor)" ,
+                                    : "var(--success-bgcolor)",
                                   padding: "5px",
                                   minWidth: "200px",
                                   borderRadius: "var(--default-border-radius)",
@@ -400,7 +382,7 @@ export function useTable({ attributes, tableType, limitPerPage = 25 }) {
                               >
                                 {row[attr.id] ? "Sold-Out" : "In-Stock"}
                               </span>
-                            )  : attr.id === "status" ? (
+                            ) : attr.id === "status" ? (
                               <span
                                 style={{
                                   color: row.isclosed
