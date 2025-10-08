@@ -145,7 +145,7 @@ const AddProduct = () => {
         <TextField
           label="Art Description"
           multiline
-          rows={3}
+          rows={8}
           fullWidth
           value={description}
           onChange={(e) => setDescription(e.target.value)}
@@ -181,15 +181,7 @@ const AddProduct = () => {
           error={!!errors.auctionStartDate}
           helperText={errors.auctionStartDate}
         />
-        <Typography variant="h6">Art Catallog (if required)</Typography>
-        <UploadFile
-          multiple
-          accept="application/pdf"
-          initialFile={catalogFile}
-          onUploadComplete={(paths) => setcatalogFile(paths)}
-          error={errors.catalogFile}
-        />
-
+      
         <TextField
           label="Auction End Date"
           type="datetime-local"
@@ -200,6 +192,15 @@ const AddProduct = () => {
           error={!!errors.auctionEndDate}
           helperText={errors.auctionEndDate}
         />
+          <Typography variant="h6">Art Catallog (if required)</Typography>
+        <UploadFile
+          multiple
+          accept="application/pdf"
+          initialFile={catalogFile}
+          onUploadComplete={(paths) => setcatalogFile(paths)}
+          error={errors.catalogFile}
+        />
+
 
         <FormControl fullWidth error={!!errors.artistId}>
           <InputLabel id="artist-select-label">Select Artist</InputLabel>

@@ -108,7 +108,7 @@ const AddArtist = () => {
         <TextField
           label="Artist Bio"
           multiline
-          rows={2}
+          rows={8}
           fullWidth
           value={artistBio}
           onChange={(e) => setArtistBio(e.target.value)}
@@ -117,7 +117,7 @@ const AddArtist = () => {
         />
 
         <TextField
-          label="Artist Country"
+          label="Address"
           fullWidth
           value={artistCountry}
           onChange={(e) => setArtistCountry(e.target.value)}
