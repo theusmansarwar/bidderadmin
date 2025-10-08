@@ -8,10 +8,10 @@ import {
 } from "@mui/material";
 import CloudUploadIcon from "@mui/icons-material/CloudUpload";
 import CloseIcon from "@mui/icons-material/Close";
+import PictureAsPdfIcon from "@mui/icons-material/PictureAsPdf"; // 📄 PDF Icon
 import axios from "axios";
 import { baseUrl } from "../../Config/Config";
 
-// Hidden input
 const VisuallyHiddenInput = React.forwardRef(({ onChange, accept }, ref) => (
   <input
     ref={ref}
@@ -25,15 +25,15 @@ const VisuallyHiddenInput = React.forwardRef(({ onChange, accept }, ref) => (
 const UploadFile = ({
   endpoint = "/upload-image",
   fieldName = "image",
-  accept = "image/*",
+  accept = "image/*,application/pdf",
   onUploadComplete,
-  initialFile = null, // relative path or full URL
-   error = "",
+  initialFile = null,
+  error = "",
 }) => {
   const [fileObj, setFileObj] = useState(null);
   const inputRef = useRef(null);
 
-  // Set initial file preview
+  // Load initial file if exists
   useEffect(() => {
     if (!initialFile || initialFile === "null") return;
 
@@ -45,6 +45,7 @@ const UploadFile = ({
     setFileObj({
       file: null,
       preview: filePath,
+      isPDF: filePath.toLowerCase().endsWith(".pdf"),
       progress: 100,
       uploading: false,
       uploadedPath: initialFile,
@@ -53,16 +54,17 @@ const UploadFile = ({
     });
   }, [initialFile]);
 
-  // Select file
+  // Select single file
   const handleSelectFile = (event) => {
     const file = event.target.files[0];
     if (!file) return;
 
+    const isPDF = file.type === "application/pdf";
+
     setFileObj({
       file,
-      preview: file.type.startsWith("image/")
-        ? URL.createObjectURL(file)
-        : null,
+      preview: isPDF ? null : URL.createObjectURL(file),
+      isPDF,
       progress: 0,
       uploading: false,
       uploadedPath: null,
@@ -135,20 +137,26 @@ const UploadFile = ({
 
   return (
     <Box>
-      <Button component="label" variant="contained" startIcon={<CloudUploadIcon />} sx={{backgroundColor:"var(--background-color)"}}>
+      <Button
+        component="label"
+        variant="contained"
+        startIcon={<CloudUploadIcon />}
+        sx={{ backgroundColor: "var(--background-color)" }}
+      >
         Upload file
-        <VisuallyHiddenInput ref={inputRef} accept={accept} onChange={handleSelectFile} />
+        <VisuallyHiddenInput
+          ref={inputRef}
+          accept={accept}
+          onChange={handleSelectFile}
+        />
       </Button>
-{error && (
-  <Typography
-    variant="caption"
-    color="error"
-    display="block"
-    mt={0.5}
-  >
-    {error}
-  </Typography>
-)}
+
+      {error && (
+        <Typography variant="caption" color="error" display="block" mt={0.5}>
+          {error}
+        </Typography>
+      )}
+
       {fileObj && (
         <Box
           sx={{
@@ -161,32 +169,72 @@ const UploadFile = ({
             mt: 2,
           }}
         >
-          {fileObj.preview ? (
+          {/* ✅ Show image or PDF preview */}
+          {fileObj.isPDF ? (
+            <Box
+              sx={{
+                height: "100px",
+                display: "flex",
+                flexDirection: "column",
+                alignItems: "center",
+                justifyContent: "center",
+                bgcolor: "#f5f5f5",
+              }}
+            >
+              <PictureAsPdfIcon color="error" sx={{ fontSize: 40 }} />
+              <Typography
+                variant="caption"
+                textAlign="center"
+                sx={{ wordBreak: "break-all", mt: 0.5 }}
+              >
+                {fileObj.file?.name || "PDF File"}
+              </Typography>
+            </Box>
+          ) : (
             <img
               src={fileObj.preview}
               alt="preview"
-              style={{ width: "100%", height: "100px", objectFit: "cover", borderRadius: "4px" }}
+              style={{
+                width: "100%",
+                height: "100px",
+                objectFit: "cover",
+                borderRadius: "4px",
+              }}
             />
-          ) : (
-            <Typography variant="body2" noWrap>{fileObj.file?.name}</Typography>
           )}
 
+          {/* ❌ Remove button */}
           <IconButton
             size="small"
-            sx={{ position: "absolute", top: 4, right: 4, background: "white" }}
+            sx={{
+              position: "absolute",
+              top: 4,
+              right: 4,
+              background: "white",
+            }}
             onClick={handleRemoveFile}
           >
             <CloseIcon fontSize="small" color="error" />
           </IconButton>
 
+          {/* ⏳ Uploading / Upload button / Uploaded status */}
           {fileObj.uploading ? (
             <Box textAlign="center" mt={1}>
               <CircularProgress variant="determinate" value={fileObj.progress} />
-              <Typography variant="caption" display="block">{fileObj.progress}%</Typography>
-              <Typography variant="caption" display="block">{fileObj.speed} | {fileObj.eta}</Typography>
+              <Typography variant="caption" display="block">
+                {fileObj.progress}%
+              </Typography>
+              <Typography variant="caption" display="block">
+                {fileObj.speed} | {fileObj.eta}
+              </Typography>
             </Box>
           ) : fileObj.progress === 100 && fileObj.uploadedPath ? (
-            <Typography variant="caption" display="block" color="success.main" textAlign="center">
+            <Typography
+              variant="caption"
+              display="block"
+              color="success.main"
+              textAlign="center"
+            >
               Uploaded
             </Typography>
           ) : (

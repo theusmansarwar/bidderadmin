@@ -34,6 +34,7 @@ const AddProduct = () => {
   const [artistId, setArtistId] = useState("");
   const [artists, setArtists] = useState([]);
   const [loading, setLoading] = useState(false);
+  const [catalogFile, setcatalogFile] = useState("");
   const [isActive, setIsActive] = useState(true);
   const [soldOut, setSoldOut] = useState(false);
 
@@ -64,6 +65,7 @@ const AddProduct = () => {
           setDescription(product.description || "");
           setImage(product.image || "");
           setMinimumBid(product.minimumBid || "");
+          setcatalogFile(product.catalogFile || "");
           setAuctionStartDate(product.auctionStartDate?.slice(0, 16) || "");
           setAuctionEndDate(product.auctionEndDate?.slice(0, 16) || "");
           setArtistId(product.artist?._id || ""); // ✅ populate artist
@@ -92,6 +94,7 @@ const AddProduct = () => {
       soldOut,
       isActive,
        artistId,
+       catalogFile
     };
 
     try {
@@ -149,7 +152,7 @@ const AddProduct = () => {
           error={!!errors.description}
           helperText={errors.description}
         />
-
+<Typography variant="h6">Art Image</Typography>
         <UploadFile
           multiple
           accept="image/*"
@@ -177,6 +180,14 @@ const AddProduct = () => {
           InputLabelProps={{ shrink: true }}
           error={!!errors.auctionStartDate}
           helperText={errors.auctionStartDate}
+        />
+        <Typography variant="h6">Art Catallog (if required)</Typography>
+        <UploadFile
+          multiple
+          accept="application/pdf"
+          initialFile={catalogFile}
+          onUploadComplete={(paths) => setcatalogFile(paths)}
+          error={errors.catalogFile}
         />
 
         <TextField
