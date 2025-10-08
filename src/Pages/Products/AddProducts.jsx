@@ -1,29 +1,56 @@
 import { useState, useEffect } from "react";
 import { useNavigate, useParams } from "react-router-dom";
-import { Button, TextField, Typography, Box, Switch, FormControlLabel } from "@mui/material";
+import {
+  Button,
+  TextField,
+  Typography,
+  Box,
+  Switch,
+  FormControlLabel,
+  MenuItem,
+  FormHelperText,
+  InputLabel,
+  Select,
+  FormControl,
+} from "@mui/material";
 import UploadFile from "../../Components/Models/UploadFile";
 import { useAlert } from "../../Components/Alert/AlertContext";
 import { createNewProducts } from "../../DAL/create";
 import { updateProducts } from "../../DAL/edit";
-import { fetchProductsbyid } from "../../DAL/fetch";
+import { fetchProductsbyid, fetchActiveArtists } from "../../DAL/fetch";
 
 const AddProduct = () => {
   const navigate = useNavigate();
   const { showAlert } = useAlert();
   const { id } = useParams();
 
+  const [errors, setErrors] = useState({});
   const [title, setTitle] = useState("");
   const [description, setDescription] = useState("");
-  const [image, setImage] = useState(""); 
+  const [image, setImage] = useState("");
   const [minimumBid, setMinimumBid] = useState("");
   const [auctionStartDate, setAuctionStartDate] = useState("");
   const [auctionEndDate, setAuctionEndDate] = useState("");
-  const [artistName, setArtistName] = useState("");
-  const [artistBio, setArtistBio] = useState("");
-  const [artistCountry, setArtistCountry] = useState("");
+  const [artistId, setArtistId] = useState("");
+  const [artists, setArtists] = useState([]);
   const [loading, setLoading] = useState(false);
-  const [isActive, setIsActive] = useState(true); // ✅ Published switch
+  const [isActive, setIsActive] = useState(true);
   const [soldOut, setSoldOut] = useState(false);
+
+  // ✅ Fetch active artists for dropdown
+  useEffect(() => {
+    const loadArtists = async () => {
+      try {
+        const res = await fetchActiveArtists();
+        if (res.status === 200 && Array.isArray(res.artists)) {
+          setArtists(res.artists);
+        }
+      } catch (err) {
+        console.error("Error loading artists:", err);
+      }
+    };
+    loadArtists();
+  }, []);
 
   // ✅ Fetch Product by ID (Edit mode)
   useEffect(() => {
@@ -35,13 +62,11 @@ const AddProduct = () => {
           const product = res.product;
           setTitle(product.title || "");
           setDescription(product.description || "");
-          setImage(product.image || []);
+          setImage(product.image || "");
           setMinimumBid(product.minimumBid || "");
           setAuctionStartDate(product.auctionStartDate?.slice(0, 16) || "");
           setAuctionEndDate(product.auctionEndDate?.slice(0, 16) || "");
-          setArtistName(product.artistName || "");
-          setArtistBio(product.artistBio || "");
-          setArtistCountry(product.artistCountry || "");
+          setArtistId(product.artist?._id || ""); // ✅ populate artist
           setIsActive(product.isActive ?? true);
           setSoldOut(product.soldOut ?? false);
         }
@@ -64,11 +89,9 @@ const AddProduct = () => {
       minimumBid: Number(minimumBid),
       auctionStartDate,
       auctionEndDate,
-      artistName,
-      artistBio,
-      artistCountry,
-      isActive,
       soldOut,
+      isActive,
+       artistId,
     };
 
     try {
@@ -79,6 +102,12 @@ const AddProduct = () => {
       if (response.status === 200 || response.status === 201) {
         showAlert("success", "Product saved successfully!");
         navigate("/products");
+      } else if (response.missingFields) {
+        const newErrors = {};
+        response.missingFields.forEach((field) => {
+          newErrors[field.name] = field.message;
+        });
+        setErrors(newErrors);
       } else {
         showAlert("error", response.message || "Something went wrong!");
       }
@@ -96,8 +125,20 @@ const AddProduct = () => {
         {id ? "Edit Auction Product" : "Add Auction Product"}
       </Typography>
 
-      <Box component="form" onSubmit={handleSubmit} sx={{ display: "grid", gap: 2 }}>
-        <TextField label="Art Title" fullWidth value={title} onChange={(e) => setTitle(e.target.value)} />
+      <Box
+        component="form"
+        onSubmit={handleSubmit}
+        sx={{ display: "grid", gap: 2 }}
+      >
+        <TextField
+          label="Art Title"
+          fullWidth
+          value={title}
+          onChange={(e) => setTitle(e.target.value)}
+          error={!!errors.title}
+          helperText={errors.title}
+        />
+
         <TextField
           label="Art Description"
           multiline
@@ -105,6 +146,8 @@ const AddProduct = () => {
           fullWidth
           value={description}
           onChange={(e) => setDescription(e.target.value)}
+          error={!!errors.description}
+          helperText={errors.description}
         />
 
         <UploadFile
@@ -112,6 +155,7 @@ const AddProduct = () => {
           accept="image/*"
           initialFile={image}
           onUploadComplete={(paths) => setImage(paths)}
+          error={errors.image}
         />
 
         <TextField
@@ -120,6 +164,8 @@ const AddProduct = () => {
           fullWidth
           value={minimumBid}
           onChange={(e) => setMinimumBid(e.target.value)}
+          error={!!errors.minimumBid}
+          helperText={errors.minimumBid}
         />
 
         <TextField
@@ -129,6 +175,8 @@ const AddProduct = () => {
           value={auctionStartDate}
           onChange={(e) => setAuctionStartDate(e.target.value)}
           InputLabelProps={{ shrink: true }}
+          error={!!errors.auctionStartDate}
+          helperText={errors.auctionStartDate}
         />
 
         <TextField
@@ -138,31 +186,29 @@ const AddProduct = () => {
           value={auctionEndDate}
           onChange={(e) => setAuctionEndDate(e.target.value)}
           InputLabelProps={{ shrink: true }}
+          error={!!errors.auctionEndDate}
+          helperText={errors.auctionEndDate}
         />
 
-        <TextField
-          label="Artist Name"
-          fullWidth
-          value={artistName}
-          onChange={(e) => setArtistName(e.target.value)}
-        />
+        <FormControl fullWidth error={!!errors.artistId}>
+          <InputLabel id="artist-select-label">Select Artist</InputLabel>
+          <Select
+            labelId="artist-select-label"
+            value={artistId}
+            onChange={(e) => setArtistId(e.target.value)}
+            label="Select Artist"
+          >
+            <MenuItem value="">Select an Artist</MenuItem>
+            {artists.map((a) => (
+              <MenuItem key={a._id} value={a._id}>
+                {a.artistName} ({a.artistCountry})
+              </MenuItem>
+            ))}
+          </Select>
+          {errors.artistId && <FormHelperText>{errors.artistId}</FormHelperText>}
+        </FormControl>
 
-        <TextField
-          label="Artist Bio"
-          multiline
-          rows={2}
-          fullWidth
-          value={artistBio}
-          onChange={(e) => setArtistBio(e.target.value)}
-        />
-
-        <TextField
-          label="Artist Country"
-          fullWidth
-          value={artistCountry}
-          onChange={(e) => setArtistCountry(e.target.value)}
-        />
-           <FormControlLabel
+        <FormControlLabel
           control={
             <Switch
               checked={isActive}
@@ -185,10 +231,10 @@ const AddProduct = () => {
         />
 
         <Box sx={{ display: "flex", justifyContent: "flex-end", gap: 2 }}>
-          <Button variant="outlined" onClick={() => navigate("/products")}>
+          <Button variant="outlined" onClick={() => navigate("/products")} sx={{color:"var(--background-color)", borderColor:"var(--background-color)"}}>
             Cancel
           </Button>
-          <Button type="submit" variant="contained" disabled={loading}>
+          <Button type="submit" variant="contained" disabled={loading} sx={{backgroundColor:"var(--background-color)"}}>
             {loading ? "Saving..." : "Save"}
           </Button>
         </Box>

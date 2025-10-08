@@ -26,6 +26,18 @@ export const fetchallProductslist = async (page, rowsPerPages,title) => {
   return invokeApi(reqObj);
 };
 
+export const fetchActiveArtists = async (page, rowsPerPages,title) => {
+  const reqObj = {
+    path: `/api/artist/list`,
+    method: "GET",
+    headers: {
+      Authorization: `Bearer ${localStorage.getItem("Token")}`,
+    },
+
+    body: {},
+  };
+  return invokeApi(reqObj);
+};
 export const fetchProductsbyid = async (id) => {
   const reqObj = {
     path: `/api/products/${id}`,
