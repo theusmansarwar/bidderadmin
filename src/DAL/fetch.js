@@ -88,7 +88,19 @@ export const fetchregisteredUsers = async () => {
 };
 export const fetchArtists = async (page, rowsPerPage, searchQuery) => {
   const reqObj = {
-    path: `/api/artist?search=${searchQuery}`,
+    path: `/api/artist?search=${searchQuery}&limit=${rowsPerPage}&page=${page}`,
+    method: "GET",
+    headers: {
+      Authorization: `Bearer ${localStorage.getItem("Token")}`,
+    },
+
+    body: {},
+  };
+  return invokeApi(reqObj);
+};
+export const fetchArtistsbyid = async (id) => {
+  const reqObj = {
+    path: `/api/artist/${id}`,
     method: "GET",
     headers: {
       Authorization: `Bearer ${localStorage.getItem("Token")}`,

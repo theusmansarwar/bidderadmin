@@ -11,7 +11,7 @@ import {
 import { useAlert } from "../../Components/Alert/AlertContext";
 import { addArtist } from "../../DAL/create";
 import { updateArtist } from "../../DAL/edit";
-import { fetchArtists } from "../../DAL/fetch";
+import { fetchArtists, fetchArtistsbyid } from "../../DAL/fetch";
 
 const AddArtist = () => {
   const navigate = useNavigate();
@@ -29,9 +29,9 @@ const AddArtist = () => {
     if (!id) return;
     const fetchData = async () => {
       try {
-        const res = await fetchArtists(id);
+        const res = await fetchArtistsbyid(id);
         if (res.status === 200) {
-          const data = res.artists;
+          const data = res.artist;
           setArtistName(data.artistName || "");
           setArtistBio(data.artistBio || "");
           setArtistCountry(data.artistCountry || "");

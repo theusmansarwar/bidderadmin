@@ -380,7 +380,7 @@ export function useTable({ attributes, tableType, limitPerPage = 25 }) {
                                   sx={{ width: 40, height: 40 }}
                                 />
                               )
-                            ) : attr.id === "isActive" ? (
+                            ) : attr.id === "isActive"  ? (
                               <span
                                 style={{
                                   color: row[attr.id]
@@ -395,6 +395,23 @@ export function useTable({ attributes, tableType, limitPerPage = 25 }) {
                                 }}
                               >
                                 {row[attr.id] ? "Public" : "Private"}
+                              </span>
+                            )
+                            : attr.id === "isFeatured"  ? (
+                              <span
+                                style={{
+                                  color: row[attr.id]
+                                    ? "var(--success-color)"
+                                    : "var(--warning-color)",
+                                  background: row[attr.id]
+                                    ? "var(--success-bgcolor)"
+                                    : "var(--warning-bgcolor)",
+                                  padding: "5px",
+                                  minWidth: "200px",
+                                  borderRadius: "var(--default-border-radius)",
+                                }}
+                              >
+                                {row[attr.id] ? "Featured" : "Not Featured"}
                               </span>
                             ) : attr.id === "soldOut" ? (
                               <span
