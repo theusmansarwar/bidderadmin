@@ -29,9 +29,7 @@ import { formatDate } from "../../Utils/Formatedate";
 import truncateText from "../../truncateText";
 import { useNavigate } from "react-router-dom";
 import {
-  deleteAllLeads,
   deleteAllProducts,
-  deleteAllTestimonials,
   deleteAllUsers,
 } from "../../DAL/delete";
 import { useAlert } from "../Alert/AlertContext";
@@ -116,15 +114,7 @@ export function useTable({ attributes, tableType, limitPerPage = 25 }) {
       setModelData(category);
       setModeltype("Update");
       setOpenUserModal(true);
-    }  else if (tableType === "Testimonial") {
-      navigate(`/edit-testimonial/${category._id}`);
-    } else if (tableType === "Lead") {
-      setModelData(category);
-      // setModeltype("Update");
-      setOpenLeadsModal(true);
-    } else if (tableType === "Applications") {
-      navigate(`/view-application/${category._id}`);
-    } 
+    }  
   };
 
   const handleDelete = async () => {
@@ -139,14 +129,15 @@ export function useTable({ attributes, tableType, limitPerPage = 25 }) {
       let response;
       if (tableType === "Products") {
         response = await deleteAllProducts({ ids: selected });
-      } else if (tableType === "Lead") {
-        response = await deleteAllLeads({ ids: selected });
-      } else if (tableType === "Testimonial") {
-        response = await deleteAllTestimonials({ ids: selected });
-      }  else if (tableType === "Users") {
+      }   else if (tableType === "Users") {
         response = await deleteAllUsers({ ids: selected });
       }else {
         showAlert("error", response.message || "Failed to delete items");
+      }
+      if(response.status==200){
+        showAlert("success", response.message);
+        fetchData();
+        setSelected([]);
       }
     } catch (error) {
       console.error("Error in delete request:", error);
