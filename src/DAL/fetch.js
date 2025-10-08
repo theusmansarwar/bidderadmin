@@ -64,5 +64,17 @@ export const fetchallUserbyid = async (id) => {
   };
   return invokeApi(reqObj);
 };
+export const fetchregisteredUsers = async () => {
+  const reqObj = {
+    path: `/api/auth/users`,
+    method: "GET",
+    headers: {
+      Authorization: `Bearer ${localStorage.getItem("Token")}`,
+    },
+
+    body: {},
+  };
+  return invokeApi(reqObj);
+};
 
 

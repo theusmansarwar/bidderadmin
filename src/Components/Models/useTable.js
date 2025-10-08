@@ -21,13 +21,18 @@ import {
 import { baseUrl } from "../../Config/Config";
 import DeleteIcon from "@mui/icons-material/Delete";
 import SearchIcon from "@mui/icons-material/Search";
-import { fetchallProductslist, fetchallUserlist } from "../../DAL/fetch";
+import {
+  fetchallProductslist,
+  fetchallUserlist,
+  fetchregisteredUsers,
+} from "../../DAL/fetch";
 import { formatDate } from "../../Utils/Formatedate";
 import truncateText from "../../truncateText";
 import { useNavigate } from "react-router-dom";
 import { deleteAllProducts, deleteAllUsers } from "../../DAL/delete";
 import { useAlert } from "../Alert/AlertContext";
 import DeleteModal from "./confirmDeleteModel";
+import RoleModel from "./RoleModel";
 
 export function useTable({ attributes, tableType, limitPerPage = 25 }) {
   const { showAlert } = useAlert(); // Since you created a custom hook
@@ -47,7 +52,7 @@ export function useTable({ attributes, tableType, limitPerPage = 25 }) {
   const [totalRecords, setTotalRecords] = useState(0);
   const navigate = useNavigate();
   const [openUserModal, setOpenUserModal] = useState(false);
-  const [openLeadsModal, setOpenLeadsModal] = useState(false);
+  const [openRoleModal, setOpenRoleModal] = useState(false);
   const [modeltype, setModeltype] = useState("Add");
   const [modelData, setModelData] = useState({});
   const [openDeleteModal, setOpenDeleteModal] = useState(false);
@@ -75,10 +80,15 @@ export function useTable({ attributes, tableType, limitPerPage = 25 }) {
     } else if (tableType === "Bidders") {
       response = await fetchallUserlist(page, rowsPerPage);
       console.log("Response:", response);
-
       setData(response.bids);
       setPage(response.page);
       setTotalRecords(response.totalBids);
+    } else if (tableType === "Registered Users") {
+      response = await fetchregisteredUsers(page, rowsPerPage);
+      console.log("Response:", response);
+      setData(response?.users);
+      setPage(response.page);
+      setTotalRecords(response.totalUsers);
     }
   };
 
@@ -105,6 +115,10 @@ export function useTable({ attributes, tableType, limitPerPage = 25 }) {
       setModelData(category);
       setModeltype("Update");
       setOpenUserModal(true);
+    } else if (tableType === "Registered Users") {
+      setModelData(category);
+      setModeltype("Update");
+      setOpenRoleModal(true);
     }
   };
 
@@ -171,6 +185,11 @@ export function useTable({ attributes, tableType, limitPerPage = 25 }) {
           setOpen={setOpenDeleteModal}
           onConfirm={handleDelete}
         />
+        <RoleModel
+          open={openRoleModal}
+          setOpen={setOpenRoleModal}
+          // onConfirm={handleDelete}
+        />
 
         <Box sx={{ width: "100%" }}>
           <Paper sx={{ width: "100%", maxHeight: "95vh", boxShadow: "none" }}>
@@ -235,7 +254,8 @@ export function useTable({ attributes, tableType, limitPerPage = 25 }) {
                   tableType !== "Lead" &&
                   tableType !== "Applications" &&
                   tableType !== "Featured Blogs" &&
-                  tableType !== "Tickets" && (
+                  tableType !== "Tickets" &&
+                  tableType !== "Registered Users" && (
                     <Button
                       sx={{
                         background: "var(--background-color)",

@@ -1,38 +1,5 @@
 import { invokeApi } from "../Utils/InvokeApi";
-export const createBlog = async (data) => {
-  console.log(...data, "djskfhjksdfks");
-  const reqObj = {
-    path: "/blog/create",
-    method: "POST",
-    headers: {
-      Authorization: `Bearer ${localStorage.getItem("Token")}`,
-    },
-    postData: data,
-  };
-  return invokeApi(reqObj);
-};
-export const createNewFaq = async (data) => {
-  const reqObj = {
-    path: "/faqs/add",
-    method: "POST",
-    headers: {
-      Authorization: `Bearer ${localStorage.getItem("Token")}`,
-    },
-    postData: data,
-  };
-  return invokeApi(reqObj);
-};
-export const createNewbenifit = async (data) => {
-  const reqObj = {
-    path: "/benefit/add",
-    method: "POST",
-    headers: {
-      Authorization: `Bearer ${localStorage.getItem("Token")}`,
-    },
-    postData: data,
-  };
-  return invokeApi(reqObj);
-};
+
 export const createnewuser = async (data) => {
   const reqObj = {
     path: "/admin/register",
@@ -213,9 +180,11 @@ export const createnewusertype = async (data) => {
   };
   return invokeApi(reqObj);
 };
-export const createTeamMember = async (data) => {
+
+//////////// Add Artist ////////// 
+export const addArtist = async (data) => {
   const reqObj = {
-    path: "/team/add",
+    path: "/api/artist",
     method: "POST",
     headers: {
       Authorization: `Bearer ${localStorage.getItem("Token")}`,
@@ -224,25 +193,4 @@ export const createTeamMember = async (data) => {
   };
   return invokeApi(reqObj);
 };
-export const createnewticket = async (id) => {
-  const reqObj = {
-    path: "/ticket/add",
-    method: "POST",
-    headers: {
-      Authorization: `Bearer ${localStorage.getItem("Token")}`,
-    },
-    postData: id,
-  };
-  return invokeApi(reqObj);
-};
-export const createMessage = async (data) => {
-  const reqObj = {
-    path: "/chat/add",
-    method: "POST",
-    headers: {
-      "Content-Type": "multipart/form-data",
-    },
-    postData: data,
-  };
-  return invokeApi(reqObj);
-};
+
