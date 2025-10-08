@@ -175,7 +175,7 @@ export const deleteAllHowwedo = async (data) => {
 };
 export const deleteAllProducts = async (data) => {
   const reqObj = {
-    path: `/Products/delete-many`,
+    path: `/Products/delete-multiple`,
     method: "DELETE", // Ensure correct capitalization
     headers: {
       "Content-Type": "application/json",
