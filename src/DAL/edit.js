@@ -1,61 +1,5 @@
 import { invokeApi } from "../Utils/InvokeApi";
-export const updateBlog = async (id, data) => {
- 
-  const reqObj = {
-    path: `/blog/update/${id}`,
-    method: "PUT",
-    headers: {  
-       "Content-Type": "application/json" ,
-      Authorization: `Bearer ${localStorage.getItem("Token")}`,},
-    postData: data,
-  };
-  return invokeApi(reqObj);
-};
 
-export const updateTeamCategory = async (id,data) => {
- 
-  const reqObj = {
-    path: `/teamcategory/update/${id}`,
-    method: "PUT",
-    headers: {      Authorization: `Bearer ${localStorage.getItem("Token")}`,},
-    postData: data,
-  };
-  return invokeApi(reqObj);
-};
-export const updateTeamMember = async (id,data) => {
- 
-  const reqObj = {
-    path: `/team/update/${id}`,
-    method: "PUT",
-    headers: {      Authorization: `Bearer ${localStorage.getItem("Token")}`,},
-    postData: data,
-  };
-  return invokeApi(reqObj);
-};
-export const updateHowwedo = async (id, data) => {
-  const reqObj = {
-    path: `/howwedo/update/${id}`,
-    method: "PUT",
-    headers: {
-      "Content-Type": "multipart/form-data",
-      Authorization: `Bearer ${localStorage.getItem("Token")}`,
-    },
-    postData: data,
-  };
-  return invokeApi(reqObj);
-};
-export const updateCategory = async (id, data) => {
-  const reqObj = {
-    path: `/category/update/${id}`,
-    method: "PUT",
-    headers: {
-      "Content-Type": "multipart/form-data",
-      Authorization: `Bearer ${localStorage.getItem("Token")}`,
-    },
-    postData: data,
-  };
-  return invokeApi(reqObj);
-};
 export const updateNewSubProducts = async (id, data) => {
   const reqObj = {
     path: `/sub-products/update/${id}`,
@@ -70,16 +14,6 @@ export const updateNewSubProducts = async (id, data) => {
 export const updateFaq = async (id, data) => {
   const reqObj = {
     path: `/faqs/update/${id}`,
-    method: "PUT",
-    headers: {
-      Authorization: `Bearer ${localStorage.getItem("Token")}`,
-    },
-    postData: data,
-  };
-  return invokeApi(reqObj);
-};export const updatebenifit = async (id, data) => {
-  const reqObj = {
-    path: `/benefit/update/${id}`,
     method: "PUT",
     headers: {
       Authorization: `Bearer ${localStorage.getItem("Token")}`,
@@ -115,7 +49,8 @@ export const updateProducts = async (id, data) => {
     method: "PUT",
     headers: {
       "Content-Type": "application/json",
-      Authorization: `Bearer ${localStorage.getItem("Token")}` },
+      Authorization: `Bearer ${localStorage.getItem("Token")}`,
+    },
     postData: data,
   };
   return invokeApi(reqObj);
@@ -151,24 +86,6 @@ export const updateusertype = async (id, data) => {
 export const updateuser = async (id, data) => {
   const reqObj = {
     path: `/admin/users/${id}`,
-    method: "PUT",
-    headers: { Authorization: `Bearer ${localStorage.getItem("Token")}` },
-    postData: data,
-  };
-  return invokeApi(reqObj);
-};
-export const updateIndustries = async (id, data) => {
-  const reqObj = {
-    path: `/industry/update/${id}`,
-    method: "PUT",
-    headers: { Authorization: `Bearer ${localStorage.getItem("Token")}` },
-    postData: data,
-  };
-  return invokeApi(reqObj);
-};
-export const updateCaseStudy= async (id, data) => {
-  const reqObj = {
-    path: `/casestudy/update/${id}`,
     method: "PUT",
     headers: { Authorization: `Bearer ${localStorage.getItem("Token")}` },
     postData: data,
@@ -247,9 +164,10 @@ export const updateComment = async (data) => {
   };
   return invokeApi(reqObj);
 };
-export const updateTestimonial = async (id, data) => {
+/////////////// Update Artist //////////////
+export const updateArtist = async (id, data) => {
   const reqObj = {
-    path: `/testimonial/update/${id}`,
+    path: `/api/artist/${id}`,
     method: "PUT",
     headers: {
       Authorization: `Bearer ${localStorage.getItem("Token")}`,

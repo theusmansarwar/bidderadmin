@@ -4,15 +4,15 @@ import { useTable } from "../../Components/Models/useTable";
 const Artists = () => {
   const attributes = [
    
-    { id: "title", label: "Products Title" },
-    { id: "soldOut", label: "Available" },
+    { id: "artistName", label: "Artist Name" },
+    { id: "isFeatured", label: "Featured" },
     { id: "isActive", label: "Visibility" },
     { id: "createdAt", label: "Created At" },
   ];
 
  
 
-  const { tableUI } = useTable({  attributes, tableType: "Products" });
+  const { tableUI } = useTable({  attributes, tableType: "Artists" });
 
   return <>{tableUI}</>;
 };

@@ -32,7 +32,7 @@ const App = ({ onLogout }) => {
   const allItems = [
     { id: 1, name: "Bidders", route: "/bidders", icon: <FaUsers /> },
     { id: 2, name: "Products", route: "/Products", icon: <AiFillProduct /> },
-    { id: 3, name: "Featured Artists", route: "/featured-artists", icon: <AiFillProduct /> },
+    { id: 3, name: "Artists", route: "/artists", icon: <AiFillProduct /> },
     { id: 4, name: "Registered Users", route: "/registered-users", icon: <AiFillProduct /> },
   ];
 
@@ -89,7 +89,7 @@ const App = ({ onLogout }) => {
           <Route path="/Products" element={<Products />} />
           <Route path="/add-Products" element={<AddProducts />} />
           <Route path="/edit-Products/:id" element={<AddProducts />} />
-          <Route path="/featured-artists" element={<Artists />} />
+          <Route path="/artists" element={<Artists />} />
           <Route path="/add-artist" element={<AddArtist />} />
           <Route path="/edit-artist/:id" element={<AddArtist />} />
           <Route path="/bidders" element={<Bidders />} />

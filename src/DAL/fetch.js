@@ -1,19 +1,17 @@
 import { invokeApi } from "../Utils/InvokeApi";
 
-
-export const searchProducts= async (title) => {
+export const searchProducts = async (title) => {
   const reqObj = {
     path: `/products/search?title=${title}`,
     method: "GET",
-    headers: {
-    },
+    headers: {},
 
     body: {},
   };
   return invokeApi(reqObj);
 };
 
-export const fetchallProductslist = async (page, rowsPerPages,title) => {
+export const fetchallProductslist = async (page, rowsPerPages, title) => {
   const reqObj = {
     path: `/api/products?title=${title}&limit=${rowsPerPages}&page=${page}`,
     method: "GET",
@@ -88,5 +86,15 @@ export const fetchregisteredUsers = async () => {
   };
   return invokeApi(reqObj);
 };
+export const fetchArtists = async (page, rowsPerPage, searchQuery) => {
+  const reqObj = {
+    path: `/api/artist?search=${searchQuery}`,
+    method: "GET",
+    headers: {
+      Authorization: `Bearer ${localStorage.getItem("Token")}`,
+    },
 
-
+    body: {},
+  };
+  return invokeApi(reqObj);
+};

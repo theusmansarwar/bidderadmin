@@ -24,6 +24,7 @@ import SearchIcon from "@mui/icons-material/Search";
 import {
   fetchallProductslist,
   fetchallUserlist,
+  fetchArtists,
   fetchregisteredUsers,
 } from "../../DAL/fetch";
 import { formatDate } from "../../Utils/Formatedate";
@@ -83,6 +84,12 @@ export function useTable({ attributes, tableType, limitPerPage = 25 }) {
       setData(response.bids);
       setPage(response.page);
       setTotalRecords(response.totalBids);
+    } else if (tableType === "Artists") {
+      response = await fetchArtists(page, rowsPerPage, searchQuery);
+      console.log("Response:", response);
+      setData(response?.artists);
+      setPage(response.page);
+      setTotalRecords(response.total);
     } else if (tableType === "Registered Users") {
       response = await fetchregisteredUsers(page, rowsPerPage);
       console.log("Response:", response);
@@ -109,8 +116,9 @@ export function useTable({ attributes, tableType, limitPerPage = 25 }) {
 
   const handleViewClick = (category) => {
     if (tableType === "Products") {
-      ///////////////////////////
       navigate(`/edit-Products/${category._id}`);
+    } else if (tableType === "Artists") {
+      navigate(`/edit-artist/${category._id}`);
     } else if (tableType === "Users") {
       setModelData(category);
       setModeltype("Update");
@@ -153,6 +161,8 @@ export function useTable({ attributes, tableType, limitPerPage = 25 }) {
   const handleAddButton = () => {
     if (tableType === "Products") {
       navigate("/add-Products");
+    } else if (tableType === "Artists") {
+      navigate("/add-artist");
     } else if (tableType === "Users") {
       setOpenUserModal(true);
       setModeltype("Add");
