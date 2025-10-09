@@ -176,3 +176,14 @@ export const updateArtist = async (id, data) => {
   };
   return invokeApi(reqObj);
 };
+export const updateRegisteredUser = async (id, data) => {
+  const reqObj = {
+    path: `/api/auth/users/${id}`,
+    method: "PUT",
+    headers: {
+      Authorization: `Bearer ${localStorage.getItem("Token")}`,
+    },
+    postData: data,
+  };
+  return invokeApi(reqObj);
+};

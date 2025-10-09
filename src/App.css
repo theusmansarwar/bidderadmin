@@ -262,19 +262,31 @@ scrollbar-width: none;
   }
 }
 
-@media screen and (max-width: 820px) {
+@media screen and (max-width: 900px) {
   .app-side-bar {
-    width: 10%;
-    height: 100vh;
+    width: 70px;
+    height: 94vh;
     border-right: 1px solid rgb(217, 217, 217);
-    display: flex;
     flex-direction: column;
     align-items: center;
   }
+
+  .app-side-bar .opencloseicon {
+    display: none;
+  }
+
+  .app-side-bar ul li span {
+    display: none;
+  }
+
+  .app-side-bar ul li {
+    justify-content: center;
+  }
+
   .app-right {
-    width: 90%;
+    width: calc(100% - 70px);
     height: 100vh;
-    padding: 0vh 0px;
+    padding: 0;
     overflow-y: scroll;
     scrollbar-width: none;
   }

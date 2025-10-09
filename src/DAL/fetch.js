@@ -13,7 +13,9 @@ export const searchProducts = async (title) => {
 
 export const fetchallProductslist = async (page, rowsPerPages, title) => {
   const reqObj = {
-    path: `/api/products?title=${title}&limit=${rowsPerPages}&page=${page}`,
+    path: `/api/products?title=${title}&limit=${rowsPerPages}&page=${page}&search=${
+      title || ""
+    }`,
     method: "GET",
     headers: {
       Authorization: `Bearer ${localStorage.getItem("Token")}`,
@@ -24,7 +26,7 @@ export const fetchallProductslist = async (page, rowsPerPages, title) => {
   return invokeApi(reqObj);
 };
 
-export const fetchActiveArtists = async (page, rowsPerPages,title) => {
+export const fetchActiveArtists = async (page, rowsPerPages, title) => {
   const reqObj = {
     path: `/api/artist/list`,
     method: "GET",
@@ -101,6 +103,18 @@ export const fetchArtists = async (page, rowsPerPage, searchQuery) => {
 export const fetchArtistsbyid = async (id) => {
   const reqObj = {
     path: `/api/artist/${id}`,
+    method: "GET",
+    headers: {
+      Authorization: `Bearer ${localStorage.getItem("Token")}`,
+    },
+
+    body: {},
+  };
+  return invokeApi(reqObj);
+};
+export const fetchuserbyid = async (id) => {
+  const reqObj = {
+    path: `/api/users/${id}`,
     method: "GET",
     headers: {
       Authorization: `Bearer ${localStorage.getItem("Token")}`,

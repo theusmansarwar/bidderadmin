@@ -30,7 +30,11 @@ import {
 import { formatDate } from "../../Utils/Formatedate";
 import truncateText from "../../truncateText";
 import { useNavigate } from "react-router-dom";
-import { deleteAllArtist, deleteAllProducts, deleteAllUsers } from "../../DAL/delete";
+import {
+  deleteAllArtist,
+  deleteAllProducts,
+  deleteAllUsers,
+} from "../../DAL/delete";
 import { useAlert } from "../Alert/AlertContext";
 import DeleteModal from "./confirmDeleteModel";
 import RoleModel from "./RoleModel";
@@ -142,10 +146,9 @@ export function useTable({ attributes, tableType, limitPerPage = 25 }) {
       let response;
       if (tableType === "Products") {
         response = await deleteAllProducts({ ids: selected });
-      } else if (tableType === "Users") {
+      } else if (tableType === "Registered Users") {
         response = await deleteAllUsers({ ids: selected });
-      }
-       else if (tableType === "Artists") {
+      } else if (tableType === "Artists") {
         response = await deleteAllArtist({ ids: selected });
       } else {
         showAlert("error", response.message || "Failed to delete items");
@@ -201,7 +204,9 @@ export function useTable({ attributes, tableType, limitPerPage = 25 }) {
         <RoleModel
           open={openRoleModal}
           setOpen={setOpenRoleModal}
-          // onConfirm={handleDelete}
+          Modeltype={modeltype}
+          Modeldata={modelData}
+          onResponse={handleResponse}
         />
 
         <Box sx={{ width: "100%" }}>
@@ -268,6 +273,7 @@ export function useTable({ attributes, tableType, limitPerPage = 25 }) {
                   tableType !== "Applications" &&
                   tableType !== "Featured Blogs" &&
                   tableType !== "Tickets" &&
+                  tableType !== "Bidders" &&
                   tableType !== "Registered Users" && (
                     <Button
                       sx={{
@@ -383,7 +389,7 @@ export function useTable({ attributes, tableType, limitPerPage = 25 }) {
                                   sx={{ width: 40, height: 40 }}
                                 />
                               )
-                            ) : attr.id === "isActive"  ? (
+                            ) : attr.id === "isActive" ? (
                               <span
                                 style={{
                                   color: row[attr.id]
@@ -399,8 +405,7 @@ export function useTable({ attributes, tableType, limitPerPage = 25 }) {
                               >
                                 {row[attr.id] ? "Public" : "Private"}
                               </span>
-                            )
-                            : attr.id === "isFeatured"  ? (
+                            ) : attr.id === "isFeatured" ? (
                               <span
                                 style={{
                                   color: row[attr.id]

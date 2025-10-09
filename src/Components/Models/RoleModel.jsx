@@ -5,17 +5,16 @@ import {
   Typography,
   Modal,
   TextField,
+  MenuItem,
 } from "@mui/material";
-import UploadFile from "./UploadFile";
-import { createNewSubProducts } from "../../DAL/create";
-import { updateNewSubProducts } from "../../DAL/edit";
+import { updateRegisteredUser } from "../../DAL/edit";
 
 const style = {
   position: "absolute",
   top: "50%",
   left: "50%",
   transform: "translate(-50%, -50%)",
-  width: "50%",
+  width: "40%",
   bgcolor: "background.paper",
   boxShadow: 24,
   p: 4,
@@ -28,17 +27,18 @@ export default function RoleModel({
   Modeltype,
   Modeldata,
   onResponse,
-  Productsid,
 }) {
-  const [title, setTitle] = React.useState(Modeldata?.title || "");
-  const [description, setDescription] = React.useState(Modeldata?.description || "");
-  const [image, setImage] = React.useState(Modeldata?.image || "");
+  const [name, setName] = React.useState(Modeldata?.name || "");
+  const [email, setEmail] = React.useState(Modeldata?.email || "");
+  const [phone, setPhone] = React.useState(Modeldata?.phone || "");
+  const [role, setRole] = React.useState(Modeldata?.role || "");
   const [id, setId] = React.useState(Modeldata?._id || "");
 
   React.useEffect(() => {
-    setTitle(Modeldata?.title || "");
-    setDescription(Modeldata?.description || "");
-    setImage(Modeldata?.image || ""); // image path string
+    setName(Modeldata?.name || "");
+    setEmail(Modeldata?.email || "");
+    setPhone(Modeldata?.phone || "");
+    setRole(Modeldata?.role || "");
     setId(Modeldata?._id || "");
   }, [Modeldata]);
 
@@ -47,22 +47,19 @@ export default function RoleModel({
   const handleSubmit = async (e) => {
     e.preventDefault();
 
-    // ✅ prepare plain object instead of FormData
     const payload = {
-      title,
-      description,
-      productid: Productsid,
-      image, // send path string ("/uploads/xxx.png")
+      name,
+      email,
+      phone,
+      role,
     };
 
     let response;
-    if (Modeltype === "Add") {
-      response = await createNewSubProducts(payload);
-    } else {
-      response = await updateNewSubProducts(id, payload);
+    if (Modeltype.toLowerCase() === "update") {
+      response = await updateRegisteredUser(id, payload);
     }
 
-    if (response.status === 201 || response.status === 200) {
+    if (response.status === 200 || response.status === 201) {
       onResponse({ messageType: "success", message: response.message });
     } else {
       onResponse({ messageType: "error", message: response.message });
@@ -75,42 +72,53 @@ export default function RoleModel({
     <Modal open={open} onClose={handleClose}>
       <Box sx={style}>
         <Typography id="modal-title" variant="h6" component="h2">
-          {Modeltype} Product
+          {Modeltype} User
         </Typography>
 
-        {/* Product Name */}
         <TextField
-          sx={{ marginTop: "10px", borderRadius: "6px" }}
+          sx={{ marginTop: "20px" }}
           fullWidth
           required
-          label="Product Name"
+          label="Name"
           variant="outlined"
-          value={title}
-          onChange={(e) => setTitle(e.target.value)}
+          value={name}
+          onChange={(e) => setName(e.target.value)}
         />
 
-        {/* Description */}
         <TextField
-          sx={{ marginTop: "10px", borderRadius: "6px" }}
+          sx={{ marginTop: "20px" }}
           fullWidth
-          multiline
-          minRows={4}
-          label="Product Description"
+          required
+          label="Email"
           variant="outlined"
-          value={description}
-          onChange={(e) => setDescription(e.target.value)}
+          value={email}
+          onChange={(e) => setEmail(e.target.value)}
         />
 
-        {/* Image Upload */}
-        <Box sx={{ marginTop: "15px" }}>
-          <UploadFile
-            accept="image/*"
-            initialFile={image} // pass existing path if editing
-            onUploadComplete={(path) => setImage(path)} // ✅ store string path
-          />
-        </Box>
+        <TextField
+          sx={{ marginTop: "20px" }}
+          fullWidth
+          required
+          label="Phone"
+          variant="outlined"
+          value={phone}
+          onChange={(e) => setPhone(e.target.value)}
+        />
 
-        {/* Buttons */}
+        <TextField
+          sx={{ marginTop: "20px", marginBottom: "20px" }}
+          fullWidth
+          select
+          required
+          label="Role"
+          variant="outlined"
+          value={role}
+          onChange={(e) => setRole(e.target.value)}
+        >
+          <MenuItem value="user">User</MenuItem>
+          <MenuItem value="admin">Admin</MenuItem>
+        </TextField>
+
         <Box
           sx={{
             display: "flex",

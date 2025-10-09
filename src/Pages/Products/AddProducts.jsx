@@ -41,6 +41,7 @@ const AddProduct = () => {
   const [catalogFile, setcatalogFile] = useState("");
   const [isActive, setIsActive] = useState(true);
   const [soldOut, setSoldOut] = useState(false);
+  
 
   const [open, setOpen] = useState(false);
   // ✅ Fetch active artists for dropdown
@@ -98,8 +99,8 @@ const AddProduct = () => {
       auctionEndDate,
       soldOut,
       isActive,
-       artistId,
-       catalogFile
+      artistId,
+      catalogFile,
     };
 
     try {
@@ -175,7 +176,7 @@ const AddProduct = () => {
           error={!!errors.description}
           helperText={errors.description}
         />
-<Typography variant="h6">Art Image</Typography>
+        <Typography variant="h6">Art Image</Typography>
         <UploadFile
           multiple
           accept="image/*"
@@ -204,7 +205,7 @@ const AddProduct = () => {
           error={!!errors.auctionStartDate}
           helperText={errors.auctionStartDate}
         />
-      
+
         <TextField
           label="Auction End Date"
           type="datetime-local"
@@ -215,7 +216,7 @@ const AddProduct = () => {
           error={!!errors.auctionEndDate}
           helperText={errors.auctionEndDate}
         />
-          <Typography variant="h6">Art Catallog (if required)</Typography>
+        <Typography variant="h6">Art Catallog (if required)</Typography>
         <UploadFile
           multiple
           accept="application/pdf"
@@ -223,7 +224,6 @@ const AddProduct = () => {
           onUploadComplete={(paths) => setcatalogFile(paths)}
           error={errors.catalogFile}
         />
-
 
         <FormControl fullWidth error={!!errors.artistId}>
           <InputLabel id="artist-select-label">Select Artist</InputLabel>
@@ -240,7 +240,9 @@ const AddProduct = () => {
               </MenuItem>
             ))}
           </Select>
-          {errors.artistId && <FormHelperText>{errors.artistId}</FormHelperText>}
+          {errors.artistId && (
+            <FormHelperText>{errors.artistId}</FormHelperText>
+          )}
         </FormControl>
 
         <FormControlLabel
@@ -266,10 +268,22 @@ const AddProduct = () => {
         />
 
         <Box sx={{ display: "flex", justifyContent: "flex-end", gap: 2 }}>
-          <Button variant="outlined" onClick={() => navigate("/products")} sx={{color:"var(--background-color)", borderColor:"var(--background-color)"}}>
+          <Button
+            variant="outlined"
+            onClick={() => navigate("/products")}
+            sx={{
+              color: "var(--background-color)",
+              borderColor: "var(--background-color)",
+            }}
+          >
             Cancel
           </Button>
-          <Button type="submit" variant="contained" disabled={loading} sx={{backgroundColor:"var(--background-color)"}}>
+          <Button
+            type="submit"
+            variant="contained"
+            disabled={loading}
+            sx={{ backgroundColor: "var(--background-color)" }}
+          >
             {loading ? "Saving..." : "Save"}
           </Button>
         </Box>
