@@ -72,9 +72,21 @@ export function useTable({ attributes, tableType, limitPerPage = 25 }) {
     fetchData();
   }, [page, rowsPerPage]);
 
-  const handleSearch = () => {
-    fetchData();
-  };
+ 
+  useEffect(() => {
+    const handler = setTimeout(() => {
+      if (searchQuery.trim() !== "") {
+        fetchData();
+      } else {
+        // If search box is cleared, load normal data
+        fetchData();
+      }
+    }, 500); // 500ms debounce delay
+
+    return () => {
+      clearTimeout(handler);
+    };
+  }, [searchQuery]); // 👈 Run whenever user types
 
   const fetchData = async () => {
     let response;
@@ -251,9 +263,7 @@ export function useTable({ attributes, tableType, limitPerPage = 25 }) {
                       endAdornment: (
                         <InputAdornment position="end">
                           <SearchIcon
-                            onClick={handleSearch}
                             sx={{
-                              cursor: "pointer",
                               color: "var(--background-color)",
                             }}
                           />
