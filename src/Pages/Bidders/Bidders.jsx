@@ -10,6 +10,7 @@ const Bidders = () => {
     { id: "bidder.phone", label: "Phone" },
     { id: "product.minimumBid", label: "Minimum Bid" },
     { id: "bidAmount", label: "User Bid" },
+    { id: "createdAt", label: "Bid Date" },
   ];
 
   

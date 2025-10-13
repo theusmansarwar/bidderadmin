@@ -170,9 +170,7 @@ export function useTable({ attributes, tableType, limitPerPage = 25 }) {
         response = await deleteAllArtist({ ids: selected });
       } else if (tableType === "Bidders") {
         response = await deleteAllBidders({ ids: selected });
-      }
-      
-      else {
+      } else {
         showAlert("error", response.message || "Failed to delete items");
       }
       if (response.status == 200) {
@@ -318,7 +316,19 @@ export function useTable({ attributes, tableType, limitPerPage = 25 }) {
               </Box>
             </Toolbar>
             <TableContainer>
-              <Table stickyHeader>
+              <Table
+                stickyHeader
+                sx={{
+                  minWidth: "1200px", // ensures scroll if columns exceed width
+                  "& th:first-of-type, & td:first-of-type": {
+                    minWidth: "60px", // 👈 first column (checkbox)
+                  },
+                  "& th, & td": {
+                    minWidth: "180px", // 👈 all other columns
+                    whiteSpace: "nowrap",
+                  },
+                }}
+              >
                 <TableHead>
                   <TableRow>
                     <TableCell padding="checkbox">
