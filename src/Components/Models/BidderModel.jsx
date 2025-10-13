@@ -3,6 +3,7 @@ import { Box, Button, Typography, Modal, TextField } from "@mui/material";
 import { useAlert } from "../Alert/AlertContext";
 import DeleteModal from "./confirmDeleteModel";
 import { deleteAllBidders } from "../../DAL/delete";
+import { formatDate } from "../../Utils/Formatedate";
 
 const style = {
   position: "absolute",
@@ -82,8 +83,16 @@ export default function BidderModel({ open, setOpen, Modeldata, onResponse }) {
     <>
       <Modal open={open} onClose={handleClose}>
         <Box sx={style}>
-          <Typography id="modal-title" variant="h6" component="h2">
-            Bid Details
+          <Typography
+            id="modal-title"
+            variant="h6"
+            component="h2"
+            sx={{ display: "flex", alignItems: "center", gap: "15px" }}
+          >
+            Bid Details{" "}
+            <p style={{ fontSize: "14px", fontStyle: "italic" }}>
+              ({formatDate(Modeldata.createdAt)})
+            </p>
           </Typography>
 
           <TextField
