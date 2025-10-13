@@ -17,11 +17,13 @@ import {
   MdOutlineDoubleArrow,
 } from "react-icons/md";
 import { FaUsers } from "react-icons/fa";
+import { HiUsers } from "react-icons/hi2";
 import { IoLogOut } from "react-icons/io5";
 import Bidders from "./Pages/Bidders/Bidders";
 import AddArtist from "./Pages/Artist/AddArtist";
 import Artists from "./Pages/Artist/Artists";
 import RegisteredUsers from "./Pages/Users/RegisteredUsers";
+import { FaUserTie } from "react-icons/fa6";
 
 const App = ({ onLogout }) => {
   const navigate = useNavigate();
@@ -32,8 +34,13 @@ const App = ({ onLogout }) => {
   const allItems = [
     { id: 1, name: "Bidders", route: "/bidders", icon: <FaUsers /> },
     { id: 2, name: "Products", route: "/Products", icon: <AiFillProduct /> },
-    { id: 3, name: "Artists", route: "/artists", icon: <AiFillProduct /> },
-    { id: 4, name: "Registered Users", route: "/registered-users", icon: <AiFillProduct /> },
+    { id: 3, name: "Artists", route: "/artists", icon: <FaUserTie /> },
+    {
+      id: 4,
+      name: "Registered Users",
+      route: "/registered-users",
+      icon: <HiUsers />,
+    },
   ];
 
   useEffect(() => {

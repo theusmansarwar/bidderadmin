@@ -106,7 +106,7 @@ export function useTable({ attributes, tableType, limitPerPage = 25 }) {
       response = await fetchArtists(page, rowsPerPage, searchQuery);
       console.log("Response:", response);
       setData(response?.artists);
-      setPage(response.page);
+      setPage(response.currentPage);
       setTotalRecords(response.total);
     } else if (tableType === "Registered Users") {
       response = await fetchregisteredUsers(page, rowsPerPage);
