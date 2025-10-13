@@ -32,12 +32,14 @@ import truncateText from "../../truncateText";
 import { useNavigate } from "react-router-dom";
 import {
   deleteAllArtist,
+  deleteAllBidders,
   deleteAllProducts,
   deleteAllUsers,
 } from "../../DAL/delete";
 import { useAlert } from "../Alert/AlertContext";
 import DeleteModal from "./confirmDeleteModel";
 import RoleModel from "./RoleModel";
+import BidderModel from "./BidderModel";
 
 export function useTable({ attributes, tableType, limitPerPage = 25 }) {
   const { showAlert } = useAlert(); // Since you created a custom hook
@@ -58,6 +60,7 @@ export function useTable({ attributes, tableType, limitPerPage = 25 }) {
   const navigate = useNavigate();
   const [openUserModal, setOpenUserModal] = useState(false);
   const [openRoleModal, setOpenRoleModal] = useState(false);
+  const [openBidderModal, setOpenBidderModal] = useState(false);
   const [modeltype, setModeltype] = useState("Add");
   const [modelData, setModelData] = useState({});
   const [openDeleteModal, setOpenDeleteModal] = useState(false);
@@ -72,7 +75,6 @@ export function useTable({ attributes, tableType, limitPerPage = 25 }) {
     fetchData();
   }, [page, rowsPerPage]);
 
- 
   useEffect(() => {
     const handler = setTimeout(() => {
       if (searchQuery.trim() !== "") {
@@ -143,6 +145,10 @@ export function useTable({ attributes, tableType, limitPerPage = 25 }) {
       setModelData(category);
       setModeltype("Update");
       setOpenRoleModal(true);
+    } else if (tableType === "Bidders") {
+      setModelData(category);
+      setModeltype("Update");
+      setOpenBidderModal(true);
     }
   };
 
@@ -162,7 +168,11 @@ export function useTable({ attributes, tableType, limitPerPage = 25 }) {
         response = await deleteAllUsers({ ids: selected });
       } else if (tableType === "Artists") {
         response = await deleteAllArtist({ ids: selected });
-      } else {
+      } else if (tableType === "Bidders") {
+        response = await deleteAllBidders({ ids: selected });
+      }
+      
+      else {
         showAlert("error", response.message || "Failed to delete items");
       }
       if (response.status == 200) {
@@ -216,6 +226,13 @@ export function useTable({ attributes, tableType, limitPerPage = 25 }) {
         <RoleModel
           open={openRoleModal}
           setOpen={setOpenRoleModal}
+          Modeltype={modeltype}
+          Modeldata={modelData}
+          onResponse={handleResponse}
+        />
+        <BidderModel
+          open={openBidderModal}
+          setOpen={setOpenBidderModal}
           Modeltype={modeltype}
           Modeldata={modelData}
           onResponse={handleResponse}

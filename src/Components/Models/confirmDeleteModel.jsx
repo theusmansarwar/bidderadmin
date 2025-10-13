@@ -41,7 +41,7 @@ export default function DeleteModal({ open, setOpen, onConfirm }) {
             variant="contained"
             sx={{
               background: "var(--warning-color)",
-              color: "var(--white-color)",
+              color: "var(--text-color)",
               "&:hover": { background: "var(--warning-color)" },
             }}
           >
