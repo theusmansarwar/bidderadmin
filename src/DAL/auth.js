@@ -3,7 +3,7 @@ import { invokeApi } from "../Utils/InvokeApi";
 export const login = async (formData) => {
   console.log("Coming data is ", ...formData);
   const reqObj = {
-    path: "/api/auth/login",
+    path: "/api/auth/adminLogin",
     method: "POST",
     headers: {},
     postData: formData,
